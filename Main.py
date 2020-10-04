@@ -4,8 +4,17 @@ import time
 PATH = "C:/Program Files (x86)\chromedriver.exe"
 
 driver = webdriver.Chrome(PATH)
-'''def is_it_int(var):'''
+def is_it_int():
 
+    while True:
+        var = input()
+        try:
+
+            var = int(var)
+            break
+        except ValueError:
+            print("Was that an integer? Please try again...")
+    return var
 def login(user, password):
     driver.get('https://huskyct.uconn.edu/') #goes to huskyCT
     driver.find_element_by_class_name("button-1").click() #gets rid of asking for cookies
@@ -29,7 +38,7 @@ def return_classes():
     classes = []
     for j, i in enumerate(driver.find_elements_by_tag_name('h4')):
         classes.append(i.get_attribute("Title"))
-        print ("Class " + str(j + 1) + ": " + i.get_attribute("Title"))
+        print("Class " + str(j + 1) + ": " + i.get_attribute("Title"))
     return classes
 
 
@@ -41,17 +50,12 @@ def return_classes():
 
 def main():
     print("Grade module has begun. Start time : " + time.ctime())
-    while True:
-        try:
-            y_or_n = int(input("Please respond with 1 (yes) or 2 (no) if you want the grading module\n"))
-            y_or_n = int(y_or_n)
-            break
-        except ValueError:
-            print("Was that an integer? Please try again...")
 
-
-    if y_or_n == 1:  #need to make excpetion if user types a string
-        username,password = prompt_login_info() if True else quit() and driver.close()
+    print("Please respond with 1 (yes) or 2 (no) if you want the grading module\n")
+    if is_it_int() == 1:
+        [username,password] = prompt_login_info()
+    else:
+        quit() and driver.quit()
     login(username, password)
     return_classes()
     int(input("\n 1:Returns class grades "))
